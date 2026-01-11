@@ -1,0 +1,62 @@
+runtime:
+  seed: 42
+  device: cuda
+  output_dir: outputs
+  run_name: mobod
+
+zero_shot:
+  model_name: cross-encoder/nli-deberta-v3-base
+  hypothesis_template: "This example is {}."
+  prompts:
+    - "The quick brown fox jumped over the lazy dog."
+    - "The latest breakthrough in quantum computing promises faster processing speeds."
+  labels:
+    - animals
+    - sports
+    - technology
+    - politics
+
+freeze_layers:
+  model_name: bert-base-uncased
+  batch_size: 8
+  learning_rate: 2e-5
+  epochs: 2
+  max_length: 128
+  layer_freezing: [80, 50, 20, 0]
+  data_formats: [fp32, fp16]
+
+adapters:
+  model_name: roberta-base
+  batch_size: 8
+  learning_rate: 1e-3
+  epochs: 3
+  max_length: 128
+  adapters: [lora, prompt, prefix]
+  data_formats: [fp32, fp16]
+  lora:
+    r: 8
+    alpha: 16
+    dropout: 0.1
+  prompt:
+    num_virtual_tokens: 10
+  prefix:
+    num_virtual_tokens: 10
+    prefix_projection: true
+
+datasets:
+  model_name: roberta-base
+  batch_size: 8
+  learning_rate: 2e-5
+  epochs: 2
+  max_length: 256
+
+quant_lora:
+  model_name: distilbert-base-uncased
+  batch_size: 16
+  learning_rate: 1e-3
+  epochs: 2
+  max_length: 128
+  lora:
+    r: 8
+    alpha: 16
+    dropout: 0.1
