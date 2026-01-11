@@ -21,3 +21,4 @@ dependencies = [
     "transformers>=4.51.3",
     "pyyaml>=6.0.2",
 ]
+    "setuptools>=70.0.0",

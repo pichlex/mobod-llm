@@ -11,7 +11,7 @@ from loguru import logger
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(REPO_ROOT / "src"))
 
-from mobod_llm.config import apply_overrides, load_config
+from mobod_llm.config import apply_overrides, load_config, normalize_config
 from mobod_llm.experiments.adapters import run_adapters
 from mobod_llm.experiments.datasets import run_dataset_comparison
 from mobod_llm.experiments.freeze_layers import run_freeze_layers
@@ -63,6 +63,7 @@ def main() -> None:
     args = parse_args()
     cfg = load_config(args.config)
     cfg = apply_overrides(cfg, args.override)
+    cfg = normalize_config(cfg)
     if args.device:
         cfg.setdefault("runtime", {})["device"] = args.device
     runtime = cfg["runtime"]

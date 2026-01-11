@@ -53,7 +53,8 @@ def train_classifier(
     precision: str,
     stage: str | None = None,
 ) -> float:
-    optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=learning_rate)
+    lr = float(learning_rate)
+    optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=lr)
     num_training_steps = epochs * len(train_loader)
     scheduler = get_linear_schedule_with_warmup(
         optimizer,
