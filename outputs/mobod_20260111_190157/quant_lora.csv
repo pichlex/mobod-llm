@@ -1,0 +1,4 @@
+stage,approach,data_format,inference_time_s,model_params,speedup,training_time_s,trainable_params,total_params,device
+quant_lora,original,fp32,85.71923232078552,66955010.0,,,,,
+quant_lora,quantized_int8,int8,83.04727578163147,23854080.0,1.0321739215887085,,,,
+quant_lora,lora,fp32,,,,226.81774950027466,739586.0,67694596.0,cuda

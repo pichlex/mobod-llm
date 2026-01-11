@@ -1,0 +1,9 @@
+stage,prompt,label,score
+zero_shot,The quick brown fox jumped over the lazy dog.,animals,0.8609813451766968
+zero_shot,The quick brown fox jumped over the lazy dog.,sports,0.13790403306484222
+zero_shot,The quick brown fox jumped over the lazy dog.,technology,0.0006011315854266286
+zero_shot,The quick brown fox jumped over the lazy dog.,politics,0.0005134888342581689
+zero_shot,The latest breakthrough in quantum computing promises faster processing speeds.,technology,0.9872232675552368
+zero_shot,The latest breakthrough in quantum computing promises faster processing speeds.,animals,0.0051703196950256824
+zero_shot,The latest breakthrough in quantum computing promises faster processing speeds.,sports,0.004182114265859127
+zero_shot,The latest breakthrough in quantum computing promises faster processing speeds.,politics,0.0034243017435073853
