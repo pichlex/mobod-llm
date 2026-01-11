@@ -80,6 +80,7 @@ def run_quant_lora(cfg: dict, device: torch.device) -> pd.DataFrame:
         epochs=epochs,
         learning_rate=learning_rate,
         precision="fp32",
+        stage="quant_lora:lora",
     )
     trainable_params, total_params = count_params(lora_model)
 

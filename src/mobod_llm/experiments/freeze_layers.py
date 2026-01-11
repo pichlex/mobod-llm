@@ -85,6 +85,7 @@ def run_freeze_layers(cfg: dict, device: torch.device) -> pd.DataFrame:
                 epochs=epochs,
                 learning_rate=learning_rate,
                 precision=precision,
+                stage=f"freeze_layers:{freeze_pct}:{precision}",
             )
 
             if precision == "int8":

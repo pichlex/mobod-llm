@@ -93,6 +93,7 @@ def run_dataset_comparison(cfg: dict, device: torch.device) -> pd.DataFrame:
             epochs=epochs,
             learning_rate=learning_rate,
             precision="fp32",
+            stage=f"datasets:{dataset_name}",
         )
 
         acc, f1 = evaluate_classifier(model, eval_loader, device, "fp32")

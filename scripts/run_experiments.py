@@ -6,6 +6,7 @@ import sys
 
 import pandas as pd
 import yaml
+from loguru import logger
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.append(str(REPO_ROOT / "src"))
@@ -72,6 +73,9 @@ def main() -> None:
         print(f"Requested device '{runtime['device']}' unavailable, using CPU.")
 
     run_dir = prepare_run_dir(runtime["output_dir"], args.run_name or runtime.get("run_name"))
+    logger.remove()
+    logger.add(sys.stdout, level="INFO")
+    logger.add(run_dir / "run.log", level="INFO")
     (run_dir / "config.resolved.yaml").write_text(yaml.safe_dump(cfg, sort_keys=False))
 
     stages = (
@@ -83,40 +87,46 @@ def main() -> None:
     outputs = {}
 
     if "zero_shot" in stages:
+        logger.info("Stage: zero_shot")
         df = run_zero_shot(cfg["zero_shot"])
         path = run_dir / "zero_shot.csv"
         write_csv(path, df)
         outputs["zero_shot"] = path
 
     if "freeze_layers" in stages:
+        logger.info("Stage: freeze_layers")
         df = run_freeze_layers(cfg["freeze_layers"], device_info.device)
         path = run_dir / "freeze_layers.csv"
         write_csv(path, df)
         outputs["freeze_layers"] = path
 
     if "adapters" in stages:
+        logger.info("Stage: adapters")
         df = run_adapters(cfg["adapters"], device_info.device)
         path = run_dir / "adapters.csv"
         write_csv(path, df)
         outputs["adapters"] = path
 
     if "datasets" in stages:
+        logger.info("Stage: datasets")
         df = run_dataset_comparison(cfg["datasets"], device_info.device)
         path = run_dir / "datasets.csv"
         write_csv(path, df)
         outputs["datasets"] = path
 
     if "quant_lora" in stages:
+        logger.info("Stage: quant_lora")
         df = run_quant_lora(cfg["quant_lora"], device_info.device)
         path = run_dir / "quant_lora.csv"
         write_csv(path, df)
         outputs["quant_lora"] = path
 
     if "summary" in stages:
+        logger.info("Stage: summary")
         summary_path = run_dir / "summary.csv"
         build_summary(list(outputs.values()), summary_path)
 
-    print(f"Outputs saved to: {run_dir}")
+    logger.info(f"Outputs saved to: {run_dir}")
 
 
 if __name__ == "__main__":

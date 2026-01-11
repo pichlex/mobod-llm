@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import contextlib
 import time
-from typing import Iterable
 
 import evaluate
 import torch
+from loguru import logger
+from tqdm import tqdm
 from torch.utils.data import DataLoader
 from transformers import DataCollatorWithPadding, get_linear_schedule_with_warmup
 
@@ -50,6 +51,7 @@ def train_classifier(
     epochs: int,
     learning_rate: float,
     precision: str,
+    stage: str | None = None,
 ) -> float:
     optimizer = torch.optim.AdamW(filter(lambda p: p.requires_grad, model.parameters()), lr=learning_rate)
     num_training_steps = epochs * len(train_loader)
@@ -65,8 +67,10 @@ def train_classifier(
 
     model.train()
     start = time.time()
-    for _ in range(epochs):
-        for batch in train_loader:
+    for epoch_idx in range(1, epochs + 1):
+        if stage:
+            logger.info(f"{stage}: epoch {epoch_idx}/{epochs} start")
+        for batch in tqdm(train_loader, desc=f"epoch {epoch_idx}", leave=False):
             batch = {k: v.to(device) for k, v in batch.items()}
             with autocast_ctx:
                 outputs = model(**batch)
@@ -80,6 +84,8 @@ def train_classifier(
                 optimizer.step()
             scheduler.step()
             optimizer.zero_grad()
+        if stage:
+            logger.info(f"{stage}: epoch {epoch_idx}/{epochs} end")
     return time.time() - start
 
 

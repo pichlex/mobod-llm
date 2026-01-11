@@ -90,6 +90,7 @@ def run_adapters(cfg: dict, device: torch.device) -> pd.DataFrame:
                 epochs=epochs,
                 learning_rate=learning_rate,
                 precision=precision,
+                stage=f"adapters:{adapter_name}:{precision}",
             )
 
             acc, f1 = evaluate_classifier(model, eval_loader, device, precision)
